@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Mobi Sports Admin</title>
+<style>
+:root{--bg:#f6f7f9;--card:#fff;--text:#14181f;--muted:#5d6675;--accent:#16a34a;--border:#d5d9e0}
+@media (prefers-color-scheme:dark){:root{--bg:#0f1318;--card:#181e26;--text:#eef1f5;--muted:#9aa4b2;--border:#2a323d}}
+body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:640px;margin:0 auto;padding:20px 16px 60px}
+h1{font-size:1.4rem}h2{font-size:1.05rem;margin:24px 0 8px}
+.row{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px;margin-bottom:10px;display:grid;gap:6px}
+input{font:inherit;color:var(--text);background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px;width:100%;box-sizing:border-box}
+button{font:inherit;font-weight:600;border:1px solid var(--border);background:var(--card);color:var(--text);border-radius:8px;padding:10px 14px;cursor:pointer}
+.pub{background:var(--accent);color:#fff;border:0;width:100%;padding:14px;font-size:1.05rem;margin-top:20px}
+.msg{margin-top:12px;font-weight:600}.muted{color:var(--muted);font-size:.85rem}
+</style>
+</head>
+<body>
+<main>
+<h1>Mobi Sports Admin</h1>
+<div id="login">
+<p>Paste your GitHub token. It is saved only in this browser, so you do this once per device.</p>
+<input id="tok" type="password" placeholder="GitHub token">
+<p><button id="go">Log in</button></p>
+<p class="muted" id="loginmsg"></p>
+</div>
+<div id="editor" hidden>
+<h2>Odds</h2><div id="odds"></div><button id="addodd">+ Add match</button>
+<h2>Booking codes</h2><div id="codes"></div><button id="addcode">+ Add code</button>
+<h2>Contact and payment</h2>
+<div class="row"><input id="wa" placeholder="WhatsApp number, e.g. 233201182491"><input id="pay" placeholder="Payment line"></div>
+<button class="pub" id="pub">Publish to live site</button>
+<div class="msg" id="msg"></div>
+<p class="muted">After publishing, the live page updates in about a minute.</p>
+<p><button id="out">Log out on this device</button></p>
+</div>
+</main>
+<script>
+var REPO="owusuq/odds",FILE="data.json",API="https://api.github.com/repos/"+REPO+"/contents/"+FILE;
+var sha=null,tok=null;
+function $(i){return document.getElementById(i)}
+function hdr(){return{Authorization:"Bearer "+tok,Accept:"application/vnd.github+json"}}
+function addRow(box,fields,vals){
+  var r=document.createElement("div");r.className="row";
+  fields.forEach(function(f){var i=document.createElement("input");i.placeholder=f[1];i.dataset.k=f[0];i.value=(vals&&vals[f[0]])||"";r.appendChild(i)});
+  var x=document.createElement("button");x.textContent="Remove";x.onclick=function(){r.remove()};r.appendChild(x);
+  box.appendChild(r);
+}
+var OF=[["league","League"],["match","Match"],["pick","Pick"],["odds","Odds"]],CF=[["label","Label"],["code","Code"],["link","Link (optional)"]];
+function collect(box){return Array.prototype.map.call(box.children,function(r){var o={};Array.prototype.forEach.call(r.querySelectorAll("input"),function(i){o[i.dataset.k]=i.value.trim()});return o})}
+function load(){
+  $("loginmsg").textContent="Checking...";
+  fetch(API,{headers:hdr(),cache:"no-store"}).then(function(r){if(!r.ok)throw new Error(r.status);return r.json()}).then(function(j){
+    sha=j.sha;
+    var d=JSON.parse(decodeURIComponent(escape(atob(j.content.replace(/\n/g,"")))));
+    $("odds").innerHTML="";$("codes").innerHTML="";
+    (d.odds||[]).forEach(function(o){addRow($("odds"),OF,o)});
+    (d.codes||[]).forEach(function(c){addRow($("codes"),CF,c)});
+    $("wa").value=d.whatsapp||"";$("pay").value=d.payment||"";
+    $("login").hidden=true;$("editor").hidden=false;
+  }).catch(function(e){
+    localStorage.removeItem("gh_tok");
+    $("loginmsg").textContent="Login failed ("+e.message+"). Check the token has access to the odds repository with Contents read and write.";
+  });
+}
+$("go").onclick=function(){tok=$("tok").value.trim();if(!tok)return;try{localStorage.setItem("gh_tok",tok)}catch(e){}load()};
+$("addodd").onclick=function(){addRow($("odds"),OF)};
+$("addcode").onclick=function(){addRow($("codes"),CF)};
+$("out").onclick=function(){try{localStorage.removeItem("gh_tok")}catch(e){}location.reload()};
+$("pub").onclick=function(){
+  var d={whatsapp:$("wa").value.trim(),payment:$("pay").value.trim(),
+    odds:collect($("odds")).filter(function(o){return o.match}),
+    codes:collect($("codes")).filter(function(c){return c.code})};
+  var body=JSON.stringify({message:"Update odds",sha:sha,content:btoa(unescape(encodeURIComponent(JSON.stringify(d,null,2))))});
+  $("msg").textContent="Publishing...";
+  fetch(API,{method:"PUT",headers:hdr(),body:body}).then(function(r){return r.json().then(function(j){return{ok:r.ok,j:j}})}).then(function(x){
+    if(!x.ok)throw new Error(x.j.message||"error");
+    sha=x.j.content.sha;$("msg").textContent="Published ✓ Live in about a minute.";
+  }).catch(function(e){$("msg").textContent="Failed: "+e.message})
+};
+try{tok=localStorage.getItem("gh_tok")}catch(e){}
+if(tok)load();
+</script>
+</body>
+</html>
