@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Daily Betting Odds</title>
+<style>
+:root{--bg:#f6f7f9;--card:#fff;--text:#14181f;--muted:#5d6675;--accent:#16a34a;--border:#e2e5ea;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1318;--card:#181e26;--text:#eef1f5;--muted:#9aa4b2;--border:#2a323d}}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.5}
+main{max-width:640px;margin:0 auto;padding:20px 16px 40px}
+h1{font-size:1.6rem;margin:0}
+.date{color:var(--muted);margin:4px 0 20px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.league{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.match{font-weight:600}
+.pick{color:var(--muted);font-size:.9rem}
+.odds{background:var(--accent);color:#fff;font-weight:700;border-radius:8px;padding:6px 12px;white-space:nowrap}
+.premium{text-align:center;padding:20px 16px;display:block}
+.premium h2{margin:0 0 6px;font-size:1.2rem}
+.premium p{margin:0 0 14px;color:var(--muted)}
+.btn{display:inline-block;background:#25d366;color:#fff;text-decoration:none;font-weight:700;padding:12px 22px;border-radius:999px}
+.pay{margin-top:12px;font-size:.9rem;color:var(--muted)}
+.code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:1.3rem;font-weight:700;letter-spacing:.08em}
+.cbtns{display:flex;gap:8px;flex-wrap:wrap}
+.small{border:1px solid var(--border);background:var(--card);color:var(--text);font:inherit;font-weight:600;font-size:.85rem;padding:8px 14px;border-radius:8px;text-decoration:none;cursor:pointer}
+.note{font-size:.78rem;color:var(--muted);margin-top:24px}
+</style>
+</head>
+<body>
+<main>
+<h1>⚽ Daily Betting Odds</h1>
+<div class="date" id="date"></div>
+<div id="list"></div>
+
+<div id="codes"></div>
+
+<div class="card premium">
+<div>
+<h2>Want my premium tips?</h2>
+<p>Pay, then message me on WhatsApp and I will send them to you.</p>
+<a class="btn" id="wa" href="#">Message me on WhatsApp</a>
+<div class="pay" id="pay"></div>
+</div>
+</div>
+
+<p class="note">18+ only. Odds are for information and entertainment. No tip or odds are ever guaranteed, and you can lose money. Only bet what you can afford to lose. Check betting is legal where you live.</p>
+</main>
+
+<script>
+// ===== EDIT THIS SECTION EACH DAY =====
+const WHATSAPP_NUMBER = "233201182491"; // your number, country code first, no + or spaces
+const PAYMENT_DETAILS = "Pay with Telecel Cash: 0201182491"; // replace with yours
+const TODAYS_ODDS = [
+  { league: "Premier League", match: "Team A vs Team B", pick: "Team A to win", odds: "1.85" },
+  { league: "La Liga", match: "Team C vs Team D", pick: "Over 2.5 goals", odds: "1.95" },
+  { league: "Serie A", match: "Team E vs Team F", pick: "Both teams to score", odds: "1.70" }
+];
+// Booking codes (put a new one each day, or leave the list empty to hide the section)
+const BOOKING_CODES = [
+  { label: "Today's Sporty code (10 games)", code: "ABC123", link: "https://www.sportybet.com/gh/" }
+];
+// =======================================
+
+document.getElementById("date").textContent =
+  new Date().toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+
+const list = document.getElementById("list");
+TODAYS_ODDS.forEach(o=>{
+  const d = document.createElement("div");
+  d.className = "card";
+  const left = document.createElement("div");
+  [["league",o.league],["match",o.match],["pick",o.pick]].forEach(([c,t])=>{
+    const s = document.createElement("div"); s.className = c; s.textContent = t; left.appendChild(s);
+  });
+  const r = document.createElement("div"); r.className = "odds"; r.textContent = o.odds;
+  d.appendChild(left); d.appendChild(r); list.appendChild(d);
+});
+
+const codesEl = document.getElementById("codes");
+BOOKING_CODES.forEach(c=>{
+  const d = document.createElement("div"); d.className = "card";
+  const left = document.createElement("div");
+  const l = document.createElement("div"); l.className = "league"; l.textContent = c.label;
+  const k = document.createElement("div"); k.className = "code"; k.textContent = c.code;
+  left.appendChild(l); left.appendChild(k);
+  const b = document.createElement("div"); b.className = "cbtns";
+  const copy = document.createElement("button"); copy.className = "small"; copy.textContent = "Copy";
+  copy.onclick = async ()=>{
+    try { await navigator.clipboard.writeText(c.code); }
+    catch(e){ const t=document.createElement("textarea"); t.value=c.code; document.body.appendChild(t); t.select(); try{document.execCommand("copy");}catch(e2){} t.remove(); }
+    copy.textContent = "Copied ✓"; setTimeout(()=>copy.textContent="Copy",2000);
+  };
+  const open = document.createElement("a"); open.className = "small"; open.textContent = "Open"; open.href = c.link; open.target = "_blank"; open.rel = "noopener";
+  b.appendChild(copy); b.appendChild(open);
+  d.appendChild(left); d.appendChild(b); codesEl.appendChild(d);
+});
+
+document.getElementById("wa").href =
+  "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent("Hello, I need premium odds");
+document.getElementById("pay").textContent = PAYMENT_DETAILS;
+</script>
+</body>
+</html>
