@@ -1,109 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="robots" content="noindex,nofollow">
-<title>Mobi Sports Admin</title>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex,nofollow"><title>Mobi Sports Admin</title>
 <style>
- :root{--text:#f8fafc;--muted:#c1ccdc;--glass:rgba(18,31,51,.88);--glass2:rgba(25,42,66,.94);--edge:rgba(148,163,184,.28);--shadow:0 12px 32px rgba(0,0,0,.32);--accent:#22c55e;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-*{-webkit-tap-highlight-color:transparent}
-body{margin:0;min-height:100vh;color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,sans-serif;line-height:1.5;
-background:radial-gradient(circle at 12% 8%,rgba(34,197,94,.13),transparent 36%),radial-gradient(circle at 88% 28%,rgba(59,130,246,.15),transparent 40%),linear-gradient(160deg,#050b16,#0a1424 55%,#101a2c) fixed}
-
-*{-webkit-tap-highlight-color:transparent}
-body{margin:0;min-height:100vh;color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,sans-serif;line-height:1.5;
-background:radial-gradient(circle at 12% 8%,rgba(34,197,94,.13),transparent 36%),radial-gradient(circle at 88% 28%,rgba(59,130,246,.15),transparent 40%),linear-gradient(160deg,#050b16,#0a1424 55%,#101a2c) fixed}
-main{max-width:640px;margin:0 auto;padding:24px 16px 48px}
-.row,#login{background:var(--glass);-webkit-backdrop-filter:blur(26px) saturate(190%);backdrop-filter:blur(26px) saturate(190%);border:1px solid var(--edge);border-radius:26px;box-shadow:var(--shadow),inset 0 1px 0 rgba(255,255,255,.55),inset 0 -1px 0 rgba(255,255,255,.12)}
-button{transition:transform .15s ease,background .2s ease}
-button:active{transform:scale(.96)}
-h1{font-size:1.7rem;font-weight:800;letter-spacing:-.03em}
-h2{font-size:1.05rem;margin:26px 0 10px}
-#login{padding:18px}
-.row{padding:12px;margin-bottom:12px;display:grid;gap:8px}
-input,textarea{font:inherit;color:var(--text);background:rgba(10,20,36,.96);border:1px solid var(--edge);border-radius:14px;padding:12px;width:100%;box-sizing:border-box;margin-bottom:8px;outline:none}
-input:focus,select:focus{border-color:rgba(22,163,74,.8)}
-select{font:inherit;color:var(--text);background:rgba(10,20,36,.96);border:1px solid var(--edge);border-radius:14px;padding:12px;width:100%;box-sizing:border-box;margin:0;outline:none}
-.row input,.row textarea{margin:0}
-button{font:inherit;font-weight:600;border:1px solid var(--edge);background:var(--glass2);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);color:var(--text);border-radius:999px;padding:11px 18px;cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,.5)}
-.pub{background:linear-gradient(180deg,#3be37f,#1fb855);color:#fff;border:0;width:100%;padding:16px;font-size:1.05rem;margin-top:22px;box-shadow:0 8px 22px rgba(31,184,85,.4),inset 0 1px 0 rgba(255,255,255,.5)}
-.msg{margin-top:14px;font-weight:600}
-.muted{color:var(--muted);font-size:.85rem}
-</style>
-</head>
-<body>
-<main>
-<h1>Mobi Sports Admin</h1>
-<div id="login" hidden>
-<input id="em" type="email" placeholder="Admin email" autocomplete="username">
-<input id="pin" type="password" inputmode="numeric" placeholder="PIN" autocomplete="current-password">
-<button id="go">Log in</button>
-<p class="muted" id="loginmsg"></p>
-</div>
-<div id="editor" hidden>
-<h2>Odds</h2><div id="odds"></div><button id="addodd">+ Add match</button>
-<h2>Booking codes</h2><p class="muted">Choose Pending, Won, Lost or Void. Set an expiry date and time if you want the code to disappear automatically after that time.</p><div id="codes"></div><button id="addcode">+ Add code</button>
-<h2>Contact and payment</h2>
-<div class="row"><input id="wa" placeholder="WhatsApp number, e.g. 233201182491"><textarea id="pay" rows="3" placeholder="Payment lines, one per line"></textarea></div>
-<button class="pub" id="pub">Publish to live site</button>
-<div class="msg" id="msg"></div>
-<p class="muted">Changes show on the live page straight away.</p>
-<p><button id="out">Log out</button></p>
-</div>
-</main>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-<script>
+:root{--text:#f8fafc;--muted:#c1ccdc;--glass:rgba(18,31,51,.88);--glass2:rgba(25,42,66,.94);--edge:rgba(148,163,184,.28);--shadow:0 12px 32px rgba(0,0,0,.32);--accent:#22c55e}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}body{margin:0;min-height:100vh;color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;line-height:1.5;background:radial-gradient(circle at 12% 8%,rgba(34,197,94,.13),transparent 36%),radial-gradient(circle at 88% 28%,rgba(59,130,246,.15),transparent 40%),linear-gradient(160deg,#050b16,#0a1424 55%,#101a2c) fixed}main{max-width:640px;margin:auto;padding:calc(24px + env(safe-area-inset-top)) 16px 48px}.row,#login,.stats{background:var(--glass);backdrop-filter:blur(26px) saturate(190%);border:1px solid var(--edge);border-radius:26px;box-shadow:var(--shadow)}h1{font-size:1.7rem;letter-spacing:-.03em}h2{font-size:1.05rem;margin:26px 0 10px}#login{padding:18px}.row{padding:12px;margin-bottom:12px;display:grid;gap:8px}input,textarea,select{font:inherit;color:var(--text);background:rgba(10,20,36,.96);border:1px solid var(--edge);border-radius:14px;padding:12px;width:100%;outline:none}input:focus,select:focus{border-color:var(--accent)}#login input{margin-bottom:8px}button{font:inherit;font-weight:600;border:1px solid var(--edge);background:var(--glass2);color:var(--text);border-radius:999px;padding:11px 18px;cursor:pointer}button:active{transform:scale(.96)}.pub{background:linear-gradient(180deg,#3be37f,#1fb855);color:#fff;border:0;width:100%;padding:16px;font-size:1.05rem;margin-top:22px}.msg{margin-top:14px;font-weight:600}.muted{color:var(--muted);font-size:.85rem}.stats{padding:16px}.stat-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.stat{background:var(--glass2);border:1px solid var(--edge);border-radius:18px;padding:14px}.stat small{display:block;color:var(--muted)}.stat strong{display:block;font-size:1.65rem;margin-top:3px}
+</style></head><body><main><h1>Mobi Sports Admin</h1><div id="login" hidden><input id="em" type="email" placeholder="Admin email" autocomplete="username"><input id="pin" type="password" placeholder="PIN" autocomplete="current-password"><button id="go">Log in</button><p class="muted" id="loginmsg"></p></div><div id="editor" hidden>
+<h2>Visitor dashboard</h2><section class="stats"><div class="stat-grid"><div class="stat"><small>Total visits</small><strong id="totalVisits">—</strong></div><div class="stat"><small>Today's visits (UTC)</small><strong id="todayVisits">—</strong></div><div class="stat"><small>Unique browsers (approx.)</small><strong id="uniqueVisitors">—</strong></div><div class="stat"><small>Today's unique browsers</small><strong id="todayUnique">—</strong></div></div><p class="muted" id="statsmsg">Loading visitor statistics…</p></section>
+<h2>Odds</h2><div id="odds"></div><button id="addodd">+ Add match</button><h2>Booking codes</h2><p class="muted">Choose Pending, Won, Lost or Void. Set an expiry date and time if you want the code to disappear automatically after that time.</p><div id="codes"></div><button id="addcode">+ Add code</button><h2>Contact and payment</h2><div class="row"><input id="wa" placeholder="WhatsApp number, e.g. 233201182491"><textarea id="pay" rows="3" placeholder="Payment lines, one per line"></textarea></div><button class="pub" id="pub">Publish to live site</button><div class="msg" id="msg"></div><p class="muted">Changes show on the live page straight away.</p><p><button id="out">Log out</button></p></div></main>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script><script>
 firebase.initializeApp({apiKey:"AIzaSyCiBQHvwgn3VGJWrHClKCvL0DlLagupiw4",authDomain:"odds-cd66d.firebaseapp.com",projectId:"odds-cd66d",storageBucket:"odds-cd66d.firebasestorage.app",messagingSenderId:"150916091185",appId:"1:150916091185:web:a2dd9551ef168a0733f410"});
-var auth=firebase.auth(),ref=firebase.firestore().doc("site/main");
-function $(i){return document.getElementById(i)}
+var auth=firebase.auth(),db=firebase.firestore(),ref=db.doc('site/main'),unsubs=[];function $(i){return document.getElementById(i)}
 var OF=[["league","League"],["match","Match"],["pick","Pick"],["odds","Odds"]],CF=[["label","Label"],["code","Code"],["link","Link (optional)"],["status","Result status","select"],["expiresAt","Expiry date and time (optional)","datetime-local"]];
-function addRow(box,fields,vals){
-  var r=document.createElement("div");r.className="row";
-  fields.forEach(function(f){
-    var i;
-    if(f[2]==="select"){
-      i=document.createElement("select");
-      [{value:"Pending",label:"Pending"},{value:"Won",label:"Won"},{value:"Lost",label:"Lost"},{value:"Void",label:"Void"}].forEach(function(opt){var o=document.createElement("option");o.value=opt.value;o.textContent="Result: "+opt.label;i.appendChild(o)});
-      i.value=(vals&&vals[f[0]])||"Pending";
-    }else{
-      i=document.createElement("input");i.placeholder=f[1];
-      if(f[2]==="datetime-local")i.type="datetime-local";
-      i.value=(vals&&vals[f[0]])||"";
-    }
-    i.dataset.k=f[0];r.appendChild(i);
-  });
-  var x=document.createElement("button");x.textContent="Remove";x.onclick=function(){r.remove()};r.appendChild(x);box.appendChild(r);
-}
-function collect(box){return Array.prototype.map.call(box.children,function(r){var o={};Array.prototype.forEach.call(r.querySelectorAll("input,select"),function(i){o[i.dataset.k]=i.value.trim()});if(!o.status)o.status="Pending";return o})}
-try{$("em").value=localStorage.getItem("admin_email")||""}catch(e){}
-auth.onAuthStateChanged(function(u){
-  if(!u){$("login").hidden=false;$("editor").hidden=true;return}
-  $("login").hidden=true;$("editor").hidden=false;
-  ref.get().then(function(s){
-    var d=s.exists?s.data():{whatsapp:"233201182491",payment:"Telecel Cash: 0201182491\nPayPal: kushbastero@icloud.com",odds:[],codes:[]};
-    $("odds").innerHTML="";$("codes").innerHTML="";
-    (d.odds||[]).forEach(function(o){addRow($("odds"),OF,o)});
-    (d.codes||[]).forEach(function(c){addRow($("codes"),CF,c)});
-    $("wa").value=d.whatsapp||"";$("pay").value=d.payment||"";
-  }).catch(function(){$("msg").textContent="Could not load current data."});
-});
-$("go").onclick=function(){
-  var e=$("em").value.trim(),p=$("pin").value;$("loginmsg").textContent="Checking...";
-  auth.signInWithEmailAndPassword(e,p).then(function(){try{localStorage.setItem("admin_email",e)}catch(x){}$("pin").value=""}).catch(function(){$("loginmsg").textContent="Wrong email or PIN."});
-};
-$("addodd").onclick=function(){addRow($("odds"),OF)};
-$("addcode").onclick=function(){addRow($("codes"),CF)};
-$("out").onclick=function(){auth.signOut()};
-$("pub").onclick=function(){
-  var d={whatsapp:$("wa").value.trim(),payment:$("pay").value.trim(),
-    odds:collect($("odds")).filter(function(o){return o.match}),
-    codes:collect($("codes")).filter(function(c){return c.code})};
-  $("msg").textContent="Publishing...";
-  ref.set(d).then(function(){$("msg").textContent="Published ✓ It is live now."}).catch(function(e){$("msg").textContent="Failed: "+(e.code==="permission-denied"?"permission denied. Check the Firestore rules and that you used the admin email.":e.message)});
-};
-</script>
-</body>
-</html>
+function addRow(box,fields,vals){var r=document.createElement('div');r.className='row';fields.forEach(function(f){var i;if(f[2]==='select'){i=document.createElement('select');['Pending','Won','Lost','Void'].forEach(function(v){var o=document.createElement('option');o.value=v;o.textContent='Result: '+v;i.appendChild(o)});i.value=(vals&&vals[f[0]])||'Pending'}else{i=document.createElement('input');i.placeholder=f[1];if(f[2]==='datetime-local')i.type='datetime-local';i.value=(vals&&vals[f[0]])||''}i.dataset.k=f[0];r.appendChild(i)});var x=document.createElement('button');x.textContent='Remove';x.onclick=function(){r.remove()};r.appendChild(x);box.appendChild(r)}
+function collect(box){return Array.from(box.children,function(r){var o={};r.querySelectorAll('input,select').forEach(function(i){o[i.dataset.k]=i.value.trim()});if(!o.status)o.status='Pending';return o})}
+function startStats(){unsubs.forEach(function(fn){fn()});unsubs=[];var today=new Date().toISOString().slice(0,10);unsubs.push(db.doc('analytics/summary').onSnapshot(function(s){var d=s.data()||{};$('totalVisits').textContent=(d.totalVisits||0).toLocaleString();$('uniqueVisitors').textContent=(d.uniqueVisitors||0).toLocaleString();$('statsmsg').textContent='Live statistics • Counts are approximate.'},function(e){$('statsmsg').textContent='Cannot load visitor statistics: '+e.message}));unsubs.push(db.collection('analytics').doc('summary').collection('days').doc(today).onSnapshot(function(s){var d=s.data()||{};$('todayVisits').textContent=(d.visits||0).toLocaleString();$('todayUnique').textContent=(d.uniqueVisitors||0).toLocaleString()},function(){$('todayVisits').textContent='—';$('todayUnique').textContent='—'}))}
+try{$('em').value=localStorage.getItem('admin_email')||''}catch(e){}
+auth.onAuthStateChanged(function(u){if(!u){unsubs.forEach(function(fn){fn()});unsubs=[];$('login').hidden=false;$('editor').hidden=true;return}$('login').hidden=true;$('editor').hidden=false;startStats();ref.get().then(function(s){var d=s.exists?s.data():{whatsapp:'233201182491',payment:'Telecel Cash: 0201182491\nPayPal: kushbastero@icloud.com',odds:[],codes:[]};$('odds').innerHTML='';$('codes').innerHTML='';(d.odds||[]).forEach(function(o){addRow($('odds'),OF,o)});(d.codes||[]).forEach(function(c){addRow($('codes'),CF,c)});$('wa').value=d.whatsapp||'';$('pay').value=d.payment||''}).catch(function(){$('msg').textContent='Could not load current data.'})});
+$('go').onclick=function(){var e=$('em').value.trim(),p=$('pin').value;$('loginmsg').textContent='Checking...';auth.signInWithEmailAndPassword(e,p).then(function(){try{localStorage.setItem('admin_email',e)}catch(x){}$('pin').value=''}).catch(function(){$('loginmsg').textContent='Wrong email or PIN.'})};$('addodd').onclick=function(){addRow($('odds'),OF)};$('addcode').onclick=function(){addRow($('codes'),CF)};$('out').onclick=function(){auth.signOut()};$('pub').onclick=function(){var d={whatsapp:$('wa').value.trim(),payment:$('pay').value.trim(),odds:collect($('odds')).filter(function(o){return o.match}),codes:collect($('codes')).filter(function(c){return c.code})};$('msg').textContent='Publishing...';ref.set(d).then(function(){$('msg').textContent='Published ✓ It is live now.'}).catch(function(e){$('msg').textContent='Failed: '+e.message})};
+</script></body></html>
