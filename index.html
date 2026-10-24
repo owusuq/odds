@@ -50,11 +50,15 @@ h1{font-size:1.6rem;margin:0}
 </footer>
 <p class="note">18+ only. Odds are for information and entertainment. No tip or odds are ever guaranteed, and you can lose money. Only bet what you can afford to lose. Check betting is legal where you live.</p>
 </main>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script>
 function el(tag,cls,text){var e=document.createElement(tag);if(cls)e.className=cls;if(text!==undefined)e.textContent=text;return e}
-fetch("data.json?t="+Date.now()).then(function(r){return r.json()}).then(function(d){
+function render(d){
+  document.getElementById("codes").innerHTML="";
   document.getElementById("date").textContent=new Date().toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
-  var list=document.getElementById("list");
+  var list=document.getElementById("list");list.innerHTML="";
   if(!d.odds||!d.odds.length){list.appendChild(el("div","card","No odds posted yet. Check back soon."))}
   (d.odds||[]).forEach(function(o){
     var c=el("div","card"),l=el("div");
@@ -76,7 +80,12 @@ fetch("data.json?t="+Date.now()).then(function(r){return r.json()}).then(functio
   });
   document.getElementById("wa").href="https://wa.me/"+d.whatsapp+"?text="+encodeURIComponent("Hello, I need premium odds");
   document.getElementById("pay").textContent=d.payment||"";
-}).catch(function(){document.getElementById("list").appendChild(el("div","card","Could not load odds. Please refresh."))});
+}
+var DEFAULTS={whatsapp:"233201182491",payment:"Pay with Telecel Cash: 0201182491",odds:[],codes:[]};
+firebase.initializeApp({apiKey:"AIzaSyCiBQHvwgn3VGJWrHClKCvL0DlLagupiw4",authDomain:"odds-cd66d.firebaseapp.com",projectId:"odds-cd66d",storageBucket:"odds-cd66d.firebasestorage.app",messagingSenderId:"150916091185",appId:"1:150916091185:web:a2dd9551ef168a0733f410"});
+firebase.firestore().doc("site/main").onSnapshot(function(s){render(s.exists?s.data():DEFAULTS)},function(){
+  var l=document.getElementById("list");l.innerHTML="";l.appendChild(el("div","card","Could not load odds. Please refresh."));
+});
 </script>
 </body>
 </html>

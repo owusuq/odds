@@ -12,7 +12,8 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-appl
 main{max-width:640px;margin:0 auto;padding:20px 16px 60px}
 h1{font-size:1.4rem}h2{font-size:1.05rem;margin:24px 0 8px}
 .row{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px;margin-bottom:10px;display:grid;gap:6px}
-input{font:inherit;color:var(--text);background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px;width:100%;box-sizing:border-box}
+input{font:inherit;color:var(--text);background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px;width:100%;box-sizing:border-box;margin-bottom:8px}
+.row input{margin:0}
 button{font:inherit;font-weight:600;border:1px solid var(--border);background:var(--card);color:var(--text);border-radius:8px;padding:10px 14px;cursor:pointer}
 .pub{background:var(--accent);color:#fff;border:0;width:100%;padding:14px;font-size:1.05rem;margin-top:20px}
 .msg{margin-top:12px;font-weight:600}.muted{color:var(--muted);font-size:.85rem}
@@ -21,10 +22,10 @@ button{font:inherit;font-weight:600;border:1px solid var(--border);background:va
 <body>
 <main>
 <h1>Mobi Sports Admin</h1>
-<div id="login">
-<p>Paste your GitHub token. It is saved only in this browser, so you do this once per device.</p>
-<input id="tok" type="password" placeholder="GitHub token">
-<p><button id="go">Log in</button></p>
+<div id="login" hidden>
+<input id="em" type="email" placeholder="Admin email" autocomplete="username">
+<input id="pin" type="password" inputmode="numeric" placeholder="PIN" autocomplete="current-password">
+<button id="go">Log in</button>
 <p class="muted" id="loginmsg"></p>
 </div>
 <div id="editor" hidden>
@@ -34,55 +35,50 @@ button{font:inherit;font-weight:600;border:1px solid var(--border);background:va
 <div class="row"><input id="wa" placeholder="WhatsApp number, e.g. 233201182491"><input id="pay" placeholder="Payment line"></div>
 <button class="pub" id="pub">Publish to live site</button>
 <div class="msg" id="msg"></div>
-<p class="muted">After publishing, the live page updates in about a minute.</p>
-<p><button id="out">Log out on this device</button></p>
+<p class="muted">Changes show on the live page straight away.</p>
+<p><button id="out">Log out</button></p>
 </div>
 </main>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script>
-var REPO="owusuq/odds",FILE="data.json",API="https://api.github.com/repos/"+REPO+"/contents/"+FILE;
-var sha=null,tok=null;
+firebase.initializeApp({apiKey:"AIzaSyCiBQHvwgn3VGJWrHClKCvL0DlLagupiw4",authDomain:"odds-cd66d.firebaseapp.com",projectId:"odds-cd66d",storageBucket:"odds-cd66d.firebasestorage.app",messagingSenderId:"150916091185",appId:"1:150916091185:web:a2dd9551ef168a0733f410"});
+var auth=firebase.auth(),ref=firebase.firestore().doc("site/main");
 function $(i){return document.getElementById(i)}
-function hdr(){return{Authorization:"Bearer "+tok,Accept:"application/vnd.github+json"}}
+var OF=[["league","League"],["match","Match"],["pick","Pick"],["odds","Odds"]],CF=[["label","Label"],["code","Code"],["link","Link (optional)"]];
 function addRow(box,fields,vals){
   var r=document.createElement("div");r.className="row";
   fields.forEach(function(f){var i=document.createElement("input");i.placeholder=f[1];i.dataset.k=f[0];i.value=(vals&&vals[f[0]])||"";r.appendChild(i)});
-  var x=document.createElement("button");x.textContent="Remove";x.onclick=function(){r.remove()};r.appendChild(x);
-  box.appendChild(r);
+  var x=document.createElement("button");x.textContent="Remove";x.onclick=function(){r.remove()};r.appendChild(x);box.appendChild(r);
 }
-var OF=[["league","League"],["match","Match"],["pick","Pick"],["odds","Odds"]],CF=[["label","Label"],["code","Code"],["link","Link (optional)"]];
 function collect(box){return Array.prototype.map.call(box.children,function(r){var o={};Array.prototype.forEach.call(r.querySelectorAll("input"),function(i){o[i.dataset.k]=i.value.trim()});return o})}
-function load(){
-  $("loginmsg").textContent="Checking...";
-  fetch(API,{headers:hdr(),cache:"no-store"}).then(function(r){if(!r.ok)throw new Error(r.status);return r.json()}).then(function(j){
-    sha=j.sha;
-    var d=JSON.parse(decodeURIComponent(escape(atob(j.content.replace(/\n/g,"")))));
+try{$("em").value=localStorage.getItem("admin_email")||""}catch(e){}
+auth.onAuthStateChanged(function(u){
+  if(!u){$("login").hidden=false;$("editor").hidden=true;return}
+  $("login").hidden=true;$("editor").hidden=false;
+  ref.get().then(function(s){
+    var d=s.exists?s.data():{whatsapp:"233201182491",payment:"Pay with Telecel Cash: 0201182491",odds:[],codes:[]};
     $("odds").innerHTML="";$("codes").innerHTML="";
     (d.odds||[]).forEach(function(o){addRow($("odds"),OF,o)});
     (d.codes||[]).forEach(function(c){addRow($("codes"),CF,c)});
     $("wa").value=d.whatsapp||"";$("pay").value=d.payment||"";
-    $("login").hidden=true;$("editor").hidden=false;
-  }).catch(function(e){
-    localStorage.removeItem("gh_tok");
-    $("loginmsg").textContent="Login failed ("+e.message+"). Check the token has access to the odds repository with Contents read and write.";
-  });
-}
-$("go").onclick=function(){tok=$("tok").value.trim();if(!tok)return;try{localStorage.setItem("gh_tok",tok)}catch(e){}load()};
+  }).catch(function(){$("msg").textContent="Could not load current data."});
+});
+$("go").onclick=function(){
+  var e=$("em").value.trim(),p=$("pin").value;$("loginmsg").textContent="Checking...";
+  auth.signInWithEmailAndPassword(e,p).then(function(){try{localStorage.setItem("admin_email",e)}catch(x){}$("pin").value=""}).catch(function(){$("loginmsg").textContent="Wrong email or PIN."});
+};
 $("addodd").onclick=function(){addRow($("odds"),OF)};
 $("addcode").onclick=function(){addRow($("codes"),CF)};
-$("out").onclick=function(){try{localStorage.removeItem("gh_tok")}catch(e){}location.reload()};
+$("out").onclick=function(){auth.signOut()};
 $("pub").onclick=function(){
   var d={whatsapp:$("wa").value.trim(),payment:$("pay").value.trim(),
     odds:collect($("odds")).filter(function(o){return o.match}),
     codes:collect($("codes")).filter(function(c){return c.code})};
-  var body=JSON.stringify({message:"Update odds",sha:sha,content:btoa(unescape(encodeURIComponent(JSON.stringify(d,null,2))))});
   $("msg").textContent="Publishing...";
-  fetch(API,{method:"PUT",headers:hdr(),body:body}).then(function(r){return r.json().then(function(j){return{ok:r.ok,j:j}})}).then(function(x){
-    if(!x.ok)throw new Error(x.j.message||"error");
-    sha=x.j.content.sha;$("msg").textContent="Published ✓ Live in about a minute.";
-  }).catch(function(e){$("msg").textContent="Failed: "+e.message})
+  ref.set(d).then(function(){$("msg").textContent="Published ✓ It is live now."}).catch(function(e){$("msg").textContent="Failed: "+(e.code==="permission-denied"?"permission denied. Check the Firestore rules and that you used the admin email.":e.message)});
 };
-try{tok=localStorage.getItem("gh_tok")}catch(e){}
-if(tok)load();
 </script>
 </body>
 </html>
