@@ -1,18 +1,16 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Mobi Sports | Daily Betting Odds</title>
 <style>
- :root{--text:#f8fafc;--muted:#c1ccdc;--glass:rgba(18,31,51,.88);--glass2:rgba(25,42,66,.94);--edge:rgba(148,163,184,.28);--shadow:0 12px 32px rgba(0,0,0,.32);--accent:#22c55e;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+:root{--text:#0b1220;--muted:rgba(11,18,32,.64);--glass:rgba(255,255,255,.42);--glass2:rgba(255,255,255,.62);--edge:rgba(255,255,255,.7);--shadow:0 10px 36px rgba(40,60,140,.20);--accent:#16a34a;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root{--text:#f2f5fa;--muted:rgba(242,245,250,.68);--glass:rgba(255,255,255,.09);--glass2:rgba(255,255,255,.16);--edge:rgba(255,255,255,.22);--shadow:0 10px 36px rgba(0,0,0,.45)}
+body{background:radial-gradient(circle at 12% 8%,rgba(34,197,94,.35),transparent 42%),radial-gradient(circle at 88% 28%,rgba(99,102,241,.40),transparent 45%),radial-gradient(circle at 30% 95%,rgba(236,72,153,.28),transparent 45%),linear-gradient(160deg,#04141c,#0a1a3a 55%,#1b0f38) fixed}}
 *{-webkit-tap-highlight-color:transparent}
 body{margin:0;min-height:100vh;color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,sans-serif;line-height:1.5;
-background:radial-gradient(circle at 12% 8%,rgba(34,197,94,.13),transparent 36%),radial-gradient(circle at 88% 28%,rgba(59,130,246,.15),transparent 40%),linear-gradient(160deg,#050b16,#0a1424 55%,#101a2c) fixed}
-
-*{-webkit-tap-highlight-color:transparent}
-body{margin:0;min-height:100vh;color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,sans-serif;line-height:1.5;
-background:radial-gradient(circle at 12% 8%,rgba(34,197,94,.13),transparent 36%),radial-gradient(circle at 88% 28%,rgba(59,130,246,.15),transparent 40%),linear-gradient(160deg,#050b16,#0a1424 55%,#101a2c) fixed}
+background:radial-gradient(circle at 12% 8%,rgba(255,255,255,.75),transparent 40%),radial-gradient(circle at 88% 28%,rgba(255,213,100,.55),transparent 42%),radial-gradient(circle at 30% 95%,rgba(255,150,200,.45),transparent 45%),linear-gradient(160deg,#9be7c4,#7cb8ff 55%,#c4a6ff) fixed}
 main{max-width:640px;margin:0 auto;padding:24px 16px 48px}
 .card{background:var(--glass);-webkit-backdrop-filter:blur(26px) saturate(190%);backdrop-filter:blur(26px) saturate(190%);border:1px solid var(--edge);border-radius:26px;box-shadow:var(--shadow),inset 0 1px 0 rgba(255,255,255,.55),inset 0 -1px 0 rgba(255,255,255,.12)}
 button,.small,.btn,.follow a{transition:transform .15s ease,background .2s ease}
@@ -23,13 +21,15 @@ h1{font-size:2.1rem;font-weight:800;letter-spacing:-.03em;margin:4px 0 0}
 .league{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:600}
 .match{font-weight:700;font-size:1.05rem}
 .pick{color:var(--muted);font-size:.92rem}
-.odds{background:linear-gradient(180deg,rgba(34,197,94,.98),rgba(21,128,61,.98));color:#fff;font-weight:800;border-radius:999px;padding:8px 16px;white-space:nowrap;box-shadow:0 4px 14px rgba(22,163,74,.4),inset 0 1px 0 rgba(255,255,255,.5)}
+.odds{background:linear-gradient(180deg,rgba(52,211,110,.95),rgba(22,163,74,.95));color:#fff;font-weight:800;border-radius:999px;padding:8px 16px;white-space:nowrap;box-shadow:0 4px 14px rgba(22,163,74,.4),inset 0 1px 0 rgba(255,255,255,.5)}
 .premium{text-align:center;display:block;padding:26px 18px}
 .premium h2{margin:0 0 6px;font-size:1.3rem;letter-spacing:-.02em}
 .premium p{margin:0 0 16px;color:var(--muted)}
 .btn{display:inline-block;background:linear-gradient(180deg,#3be37f,#1fb855);color:#fff;text-decoration:none;font-weight:700;padding:14px 26px;border-radius:999px;box-shadow:0 8px 22px rgba(31,184,85,.4),inset 0 1px 0 rgba(255,255,255,.5)}
 .tiers{display:flex;gap:10px;justify-content:center;margin:0 0 16px}.tier{flex:1;max-width:170px;background:var(--glass2);border:1px solid var(--edge);border-radius:20px;padding:12px;display:grid;gap:2px;box-shadow:inset 0 1px 0 rgba(255,255,255,.5)}.tier b{font-size:.85rem;color:var(--muted);font-weight:600}.tier span{font-size:1.5rem;font-weight:800;letter-spacing:-.02em}
 .pay{white-space:pre-line;margin-top:14px;font-size:.92rem;color:var(--muted);font-weight:500}
+.result{display:inline-block;margin-top:8px;padding:4px 10px;border-radius:999px;font-size:.72rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;background:rgba(100,116,139,.16);color:var(--text)}
+.result.won{background:rgba(22,163,74,.16);color:#16803d}.result.lost{background:rgba(220,38,38,.14);color:#dc2626}.result.void{background:rgba(217,119,6,.16);color:#b45309}
 .code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:1.35rem;font-weight:800;letter-spacing:.1em}
 .cbtns{display:flex;gap:8px;flex-wrap:wrap}
 .small{border:1px solid var(--edge);background:var(--glass2);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);color:var(--text);font:inherit;font-weight:600;font-size:.85rem;padding:9px 16px;border-radius:999px;text-decoration:none;cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,.5)}
@@ -78,9 +78,19 @@ function render(d){
     l.appendChild(el("div","league",o.league));l.appendChild(el("div","match",o.match));l.appendChild(el("div","pick",o.pick));
     c.appendChild(l);c.appendChild(el("div","odds",o.odds));list.appendChild(c);
   });
-  (d.codes||[]).forEach(function(k){
+  var activeCodes=(d.codes||[]).filter(function(k){
+    if(!k.expiresAt)return true;
+    var expiry=new Date(k.expiresAt).getTime();
+    return !Number.isFinite(expiry)||expiry>Date.now();
+  });
+  if(!activeCodes.length){document.getElementById("codes").appendChild(el("div","card","No active booking codes right now."));}
+  activeCodes.forEach(function(k){
     var c=el("div","card"),l=el("div");
     l.appendChild(el("div","league",k.label));l.appendChild(el("div","code",k.code));
+    var status=(k.status||"pending").toLowerCase();
+    var statusLabels={pending:"Pending",won:"Won",lost:"Lost",void:"Void"};
+    var badge=el("div","result "+(statusLabels[status]?status:"pending"),statusLabels[status]||"Pending");
+    l.appendChild(badge);
     var b=el("div","cbtns"),cp=el("button","small","Copy");
     cp.onclick=function(){
       var done=function(){cp.textContent="Copied ✓";setTimeout(function(){cp.textContent="Copy"},2000)};
@@ -96,7 +106,9 @@ function render(d){
 }
 var DEFAULTS={whatsapp:"233201182491",payment:"Telecel Cash: 0201182491\nPayPal: kushbastero@icloud.com",odds:[],codes:[]};
 firebase.initializeApp({apiKey:"AIzaSyCiBQHvwgn3VGJWrHClKCvL0DlLagupiw4",authDomain:"odds-cd66d.firebaseapp.com",projectId:"odds-cd66d",storageBucket:"odds-cd66d.firebasestorage.app",messagingSenderId:"150916091185",appId:"1:150916091185:web:a2dd9551ef168a0733f410"});
-firebase.firestore().doc("site/main").onSnapshot(function(s){render(s.exists?s.data():DEFAULTS)},function(){
+var latestData=DEFAULTS;
+setInterval(function(){render(latestData)},30000);
+firebase.firestore().doc("site/main").onSnapshot(function(s){latestData=s.exists?s.data():DEFAULTS;render(latestData)},function(){
   var l=document.getElementById("list");l.innerHTML="";l.appendChild(el("div","card","Could not load odds. Please refresh."));
 });
 </script>
